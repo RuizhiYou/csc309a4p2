@@ -2,7 +2,7 @@
 <head>
 <title>user page</title>
 		<link rel="stylesheet" type="style/css" href="/profile.css" /> 
-		<script src="http://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+		<script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 		<link rel="stylesheet" type="style/css" href="/navbar.css" /> 
 		<script src="../../cookie.js"></script>
@@ -403,7 +403,7 @@
 	  		var user_id = document.getElementById("recognition_tag").getAttribute("value");
 
 
-			$.post("http://localhost:3000/users/"+user_id+"/show", function(data,status){
+			$.post("/users/"+user_id+"/show", function(data,status){
 				// 
 	      		var information = JSON.parse(data);
 	      		//mock
