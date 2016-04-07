@@ -1,0 +1,96 @@
+div{ 
+	word-wrap: break-word; 
+	word-break: break-all; 
+}
+body{
+	background-color: #f2f2f2;
+	font-family: "Avenir",sans-serif;
+}
+
+#canvas{
+	position:fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	background: rgb(247,250,252);
+}
+#title{
+	border-bottom: 2px solid black;
+}
+#description{
+	padding-bottom: 40px;
+}
+#follow{
+	float:right;
+	
+}
+@media only screen and (min-width: 600px) and (max-width: 800px) {
+	#content{
+		margin-left: 28%;
+		width: 450px;
+	}
+	#title{
+		margin-left: 28%;
+		width: 450px;
+	}
+}
+@media only screen and (min-width: 800px) {
+	#content{
+		margin-left: 28%;
+		width: 600px;
+	}
+	#title{
+		margin-left: 28%;
+		width: 600px;
+	}
+}
+@media only screen and (max-width: 600px) {
+	#content{
+		margin-left: 5%;
+	}
+	#title{
+		margin-left: 5%;
+	}
+}
+#topic{
+	display: inline;
+}
+.post{
+	border-bottom: 2px solid #a6a6a6;
+	height: auto;
+	position: relative;
+}
+.title{
+	font-style: bold; 
+	font-size: 30;
+	text-align: left;
+}
+.homeTitle{
+	font-style: bold; 
+	font-size: 60;
+	text-align: center;
+	margin-top: 10%;
+}
+.homeSubTitle{
+ 
+	font-size: 40;
+	text-align: center;
+	margin-top: 0%;
+}
+.ava{
+	background-color: white;
+	border: 1px solid black;
+
+	position: relative;
+}
+.botbar{
+	bottom: 0px;
+	position: absolute;
+}
+.vote{
+	background-color: #f1f1f1;
+	border: 2px solid black;
+}
+#rating_button{
+	padding-left: 60%;
+}
