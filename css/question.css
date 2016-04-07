@@ -1,14 +1,12 @@
-
+div{ 
+	word-wrap: break-word; 
+	word-break: break-all; 
+}
 body{
 	background-color: #f2f2f2;
 	font-family: "Avenir",sans-serif;
 }
-a.visited{
-	color:inherit;
-}
-a{
-	color:inherit;
-}
+
 #canvas{
 	position:fixed;
 	top: 0;
@@ -34,40 +32,18 @@ a{
 		margin-left: 5%;
 	}
 }
-.post{
-	border-bottom: 2px solid #a6a6a6;
-	height: auto;
-	position: relative;
-}
-.title{
-	font-style: bold; 
-	font-size: 30;
-	text-align: left;
-}
-.homeTitle{
-	font-style: bold; 
-	font-size: 60;
-	text-align: center;
-	margin-top: 10%;
-}
-.homeSubTitle{
- 
-	font-size: 40;
-	text-align: center;
-	margin-top: 0%;
+#question{
+	border-bottom: 1px solid black;
 }
 .ava{
 	background-color: white;
 	border: 1px solid black;
-
 	position: relative;
+}
+.follow{
+	border-bottom: 1px solid black;
 }
 .botbar{
 	bottom: 0px;
-	position: absolute;
+	position: auto;
 }
-.vote{
-	background-color: #f1f1f1;
-	border: 2px solid black;
-}
-

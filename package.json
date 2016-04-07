@@ -1,0 +1,25 @@
+{
+  "name": "csc309-a4-p2",
+  "version": "1.0.0",
+  "description": "CSC309 Assignment 4 Part 1",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "mongodb": "^2.1.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RuizhiYou/CSC309-A4-P2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RuizhiYou/CSC309-A4-P2/issues"
+  },
+  "homepage": "https://github.com/RuizhiYou/CSC309-A4-P2#readme"
+}

@@ -1,0 +1,409 @@
+<html>
+	<head>
+		<link href="navbar.css" type="text/css" rel="stylesheet" />
+		<script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="post.css">
+		<script src="cookie.js"></script>
+		<meta name="google-signin-scope" content="profile email">
+		<meta name="google-signin-client_id" content="1093471702807-eqfo5mijcvdgac90o979f70aba4c9vj6.apps.googleusercontent.com">
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script>
+	var topics=[];
+	function adding(topic){
+		topics.push(topic);
+		alert(topic+" added");
+	}
+	$(document).ready(function(){
+	    var sub_button = $("#post_button");
+	    sub_button.click(function(){
+
+			// to store the post type and star rate
+	    	var review = document.getElementById("radio1").checked;
+	    	var question = document.getElementById("radio2").checked;
+	    	var star1 = document.getElementById("star1").checked;
+	    	var star2 = document.getElementById("star2").checked;
+	    	var star3 = document.getElementById("star3").checked;
+	    	var star4 = document.getElementById("star4").checked;
+	    	var star5 = document.getElementById("star5").checked;
+	    	var cb1 = document.getElementById("cb1").checked;
+	    	var cb2 = document.getElementById("cb2").checked;
+	    	var cb3 = document.getElementById("cb3").checked;
+	    	var cb4 = document.getElementById("cb4").checked;
+
+			var post_type;
+			var star;
+
+			var text;
+			var post_type_check = false; // true if "review", false if "question"
+			var post_nonempty = false; // true if it is nonempty, false if it is empty
+			var post_type_container = [];
+			var final_container = [];
+			// to store the post type
+			if (review == true){
+				post_type = "review";
+				if (star1 == true){
+					star = "1";
+					post_type_check = true;
+					post_nonempty = true;
+				}
+				if (star2 == true){
+					star = "2";
+					post_type_check = true;
+					post_nonempty = true;
+				}
+				if (star3 == true){
+					star = "3";
+					post_type_check = true;
+					post_nonempty = true;
+
+				}
+				if (star4 == true){
+					star = "4";
+					post_type_check = true;
+					post_nonempty = true;
+				}
+				if (star5 == true){
+					star = "5";
+					post_type_check = true;
+					post_nonempty = true;
+				}
+			}
+			if (question == true){
+				post_type = "question";
+				post_nonempty = true;
+
+			}
+
+			if (post_nonempty == true){
+				post_type_container.push(post_type);
+				if (post_type_check == true){
+					post_type_container.push(star);
+				}
+			}
+
+			// store the topics
+
+
+			if (cb1 == true){
+				topics.push("iPhone");
+			}
+			if (cb2 == true){
+				topics.push("iPhone Screen");
+			}
+			if (cb3 == true){
+				topics.push("iPhone Battery");
+			}
+			if (cb4 == true){
+				topics.push("iPhone Performance");
+			}
+			alert(topics);
+			// store the post title
+	    	var post_title = $('#post_title').val();
+
+	    	// store the text
+	    	text = CKEDITOR.instances.details.getData();
+
+	        if ((post_type_container.length==0)){
+	        	alert("You have something incompleted");
+	        }
+	        else{
+	        	final_container.push(post_type_container);
+	        	final_container.push(topics);
+	        	final_container.push(post_title);
+	        	final_container.push(text);
+	        }
+	        console.log(post_type_container);
+	        $.post("/p", {'post_type': JSON.stringify(post_type_container), 'topics': JSON.stringify(topics), 'title': post_title, 'text':text,'author':checkCookie()}, function(data,status){
+	        	alert("Posted");
+	        	data = JSON.parse(data);
+	        	window.location.href = '/posts/'+data.post_id+'/show';
+	        });
+	    });
+	});
+	</script>
+	</head>
+	<body>
+		<form id="pop-form">
+        <div id='pop-div' style="width: 800px;" class="pop-box">
+            <header>
+                <h3>Search...</h3>
+               </header>
+            <div class="pop-box-body">
+                <p>
+                   <h3 id="TopicTitle">Topic:</h3>
+                   <div><h3 id="QuestionTitle">Questions:</h3></div>
+                   <div><h3 id="ArticleTitle">Article:</h3></div>
+                </p>
+            </div>  
+        </div>
+    	</form>
+
+		<form id="pop-form2">
+        <div id='pop-div2' style="width: 800px;" class="pop-box2">
+            <header>
+                <h3>Search...</h3>
+               </header>
+            <div class="pop-box-body2">
+                <p>
+                   <h3 id="TopicTitle2">Topic:</h3>
+                </p>
+            </div>  
+        </div>
+    	</form>
+
+		<ul id="nav">
+			<li>&nbsp&nbsp&nbsp</li>
+			<li><a href="/"><font color="white">TechHub</font></a></li>
+			<li id="searchbar">
+				<input id="bar" type="text" placeholder="Search for Topic, Question or Answer..."></input><button href="login.html" id="sub_button" class="button" type="button">Search</button>
+			</li>
+				<li><a href="/main.html"><font color="white">Feed</font></a></li>
+				<li><a href="/community.html"><font color="white">Community</font></a></li>
+        		<li ><div id='sta'><a href="/login.html"><font color="white">Login</font></a></div></li>
+		</ul>
+
+		<canvas id="canvas"></canvas>
+
+		<div class="new_post">
+			<Strong><h class="left">Choose your post type:</h></strong>
+
+			<input class="right" type="radio" id="radio1" name="post_type" value="review">
+			<label class="right" for="radio1">Review</label>
+
+			<input class="right" type="radio" id="radio2" name="post_type" value="question">
+			<label class="right" for="radio2">Question/Discussion</label><br>
+
+
+
+			<div class="rating">
+				<h class="left"><strong class="choice">Choose a rating</strong></h>
+				<span class="star-rating">
+					<input class="star" type="radio" id="star1" name="rating" value="1"><i></i>
+					<input class="star" type="radio" id="star2" name="rating" value="2"><i></i>
+					<input class="star" type="radio" id="star3" name="rating" value="3"><i></i>
+					<input class="star" type="radio" id="star4" name="rating" value="4"><i></i>
+					<input class="star" type="radio" id="star5" name="rating" value="5"><i></i>
+				</span>
+			</div>
+
+		<script>
+			$('.rating').slideToggle(1);
+		</script>
+
+			<br>
+			<strong><h class="left">Suggested topics:</h></strong>
+
+
+			<input id="cb1" class="right" type="checkbox" name="tag" value="post_tag" value="iPhone">
+			<label class="right" for="cb1">iPhone</label>
+
+			<input id="cb2" class="right" type="checkbox" name="tag" value="post_tag" value="iPhone_screen">
+			<label class="right" for="cb2">iPhone Screen</label>
+
+			<input id="cb3" class="right" type="checkbox" name="tag" value="post_tag" value="iPhone_battery">
+			<label class="right" for="cb3">iPhone Battery</label>
+
+			<input id="cb4" class="right" type="checkbox" name="tag" value="post_tag" value="iPhone_performance">
+			<label class="right" for="cb4">iPhone Performance</label>
+
+			<h> or </h>
+			<input id="cb5" class="right" type="text" name="new_tag" placeholder="Enter a new sub-topic here" size="25">
+			<input class="right" type="submit" name="new_tag_button" value="Add"> <br>
+
+			<br>
+			<strong><h class="left">Post title: </h></strong>
+			<br>
+			<input class="right" type="text" name="post_title" id="post_title" placeholder="Please enter your post title" size="75"><br>
+			
+			<br>
+			<strong><h class="left">Details:</h></strong>
+			<textarea class="right" id="details" name="editor1"></textarea> <br>
+			<input type="submit" name="save_draft" value="Save as draft">
+			
+			<input type="submit" id="post_button" name="post_content" value="Post content">
+
+	
+		</div>
+		<div class="g-signin2" style="display: none"data-onsuccess="onSignIn"></div>
+
+
+		<script>
+			CKEDITOR.replace( 'editor1' );
+			CKEDITOR.config.width = "70%";
+			CKEDITOR.config.height = "250px";
+
+		</script>
+
+
+		<script type="text/javascript">
+		  $(function() {
+		    $('input[name=post_type]').change(function() {
+		    if($(this).val() == 'review') {$('.rating').slideToggle('500');}
+		    if($(this).val() == 'question') {$('.rating').slideUp('500');} 
+
+		    });
+		  });
+		</script>
+
+
+<script>
+		//Topic saerch effect
+		function show2(){
+		    var div_obj = $("#pop-div2");
+		        var posLeft = ($(window).width() - div_obj.width())/2;
+		        var posTop = (window.innerHeight-div_obj.height())/2;
+		        //Adding and Showing Mask
+		        $("<div id='mask2'></div>").addClass("mask2")     
+		                                  .appendTo("body")   
+		                                  .fadeIn(200);
+		        div_obj.css({"top": posTop , "left": posLeft}).fadeIn(); 
+		}
+		document.getElementById("cb5").onfocus=function(){
+		    show2();
+		}
+		document.getElementById("cb5").onblur=function(){
+		    $("#mask2").fadeOut();
+		    $("#pop-div2").fadeOut();
+		    $(".mask2").fadeOut();                
+		}
+		document.getElementById("cb5").oninput=function(){
+		    document.getElementById("TopicTitle2").innerHTML = "Topic: ";
+		    var content = $('#cb5').val();
+		    if (content == ""){
+		        return;
+		    }
+		    while(content.includes(' ')){
+		        content = content.replace(' ','+');
+		    }
+
+		    $.get("/search/"+
+		    content,
+		    function(data,status){
+		    var jsondata = JSON.parse(data);
+		    if (jsondata.found != "0"){
+		    	var ref = '\"javascript:adding(\''+jsondata.found+'\');\"'
+		        document.getElementById("TopicTitle2").innerHTML += ("<a href="+ref+">"+jsondata.found+"</a>");
+		    }
+		    else{
+		    	var ref = '\"javascript:adding(\''+document.getElementById("cb5").value+'\');\"'
+		        document.getElementById("TopicTitle2").innerHTML += ("No Result. You can still <a href="+ref+">add</a>")
+		    }
+		    });
+		}
+		var max_width = window.innerWidth, max_hight = window.innerHeight, NumOfPoints = 25;//initial the max width, hight and num of points in main page
+		
+		var canvas = document.getElementById('canvas');//get the object
+		canvas.width = max_width,//set the max width
+		canvas.height = max_hight;//set the max hight
+		var context = canvas.getContext('2d');
+		context.strokeStyle = 'rgba(0,0,0,0.5)',//initial the stroke style
+		context.strokeWidth = 1,//set the stroke's width
+		context.fillStyle = 'rgba(0,0,0,0.2)';//fill the color into the point
+		var circleList = [];
+		function Line (x, y, _x, _y, o) {
+			this.origin_X = x,//initial x of the line
+			this.origin_Y = y,//initial y of the line
+			this.end_X = _x,//where x end of the line
+			this.end_Y = _y,//where y end of the line
+			this.o = o;//transparency of the line
+		}
+		function resize(){
+			canvas.width = window.innerWidth,//set the max width
+			canvas.height = window.innerHeight;//set the max hight
+			context.fillStyle = 'rgba(0,0,0,0.2)';
+		}
+		function Circle(x, y, r, currX, currY){//initialize the origin of circle here
+			this.x = x,//initialize the x
+			this.y = y,//initialize the y
+			this.r = r,//initialize the radius
+			this.currX = currX,//new x where it moves to
+			this.currY = currY;//new y where it moves to
+		}
+
+		function random_Num(max, _min) {//generates a random number within the max and min
+			var min = arguments[1] || 0;
+			return Math.floor(Math.random()*(max-min+1)+min);
+		}
+
+		function drawCricle (cxt, x, y, r, currX, currY) {
+			var circle = new Circle(x, y, r, currX, currY)
+			cxt.beginPath()
+			cxt.arc(circle.x, circle.y, circle.r, 0, 2*Math.PI)
+			cxt.closePath()
+			cxt.fill();
+			return circle;
+		}
+
+		function drawLine (cxt, x, y, _x, _y, o) {//connect the two point 
+			var line = new Line(x, y, _x, _y, o)//create the new line here
+			cxt.beginPath()
+			cxt.strokeStyle = 'rgba(0,0,0,'+ o +')'//make the line to stroke
+			cxt.moveTo(line.origin_X, line.origin_Y)//the destination where the line moves to by x
+			cxt.lineTo(line.end_X, line.end_Y)//the desination where the line moves to by y
+			cxt.closePath()
+			cxt.stroke();
+
+		}
+
+		function origin() {//creates origin for each new pinte in html, and limit the number of points that will be generated in html
+			circleList = [];
+			for (var i = 0; i < NumOfPoints; i++) {//counts down the number of the points that have been drawn
+				circleList.push(drawCricle(context, random_Num(max_width), random_Num(max_hight), random_Num(15, 2), random_Num(10, -10)/40, random_Num(10, -10)/40));
+			}
+			draw();
+			resize();
+		}
+
+
+		function draw() {//make each small part to move by updating the x and y
+			context.clearRect(0,0,canvas.width, canvas.height);//clean the old line here
+			for (var i = 0; i < NumOfPoints; i++) {//loop the circle in the circleList
+				drawCricle(context, circleList[i].x, circleList[i].y, circleList[i].r);
+			}
+			for (var i = 0; i < NumOfPoints; i++) {//loop the circle in the circleList
+				for (var j = 0; j < NumOfPoints; j++) {
+					if (i + j < NumOfPoints) {
+						var A = Math.abs(circleList[i+j].x - circleList[i].x),
+							B = Math.abs(circleList[i+j].y - circleList[i].y);
+						var lineLength = Math.sqrt(A*A + B*B);//get the area
+						var C = 1/lineLength*7-0.009;
+						var lineOpacity = C > 0.03 ? 0.03 : C;
+						if (lineOpacity > 0) {
+							drawLine(context, circleList[i].x, circleList[i].y, circleList[i+j].x, circleList[i+j].y, lineOpacity);
+						}
+					}
+				}
+			}
+		}
+
+
+		window.onload = function () {
+			origin();
+			setInterval(function () {//load the function to start drawing
+				for (var i = 0; i < NumOfPoints; i++) {
+					var cir = circleList[i];
+					cir.x += cir.currX;
+					cir.y += cir.currY;
+					if (cir.x > max_width) cir.x = 0;
+					else if (cir.x < 0) cir.x = max_width;
+					if (cir.y > max_hight) cir.y = 0;
+					else if (cir.y < 0) cir.y = max_hight;
+					
+				}
+				draw();
+			}, 16);
+		}
+
+	</script>
+
+
+
+	<script src="navbar.js"></script>
+
+	</body>
+
+
+
+
+</html>

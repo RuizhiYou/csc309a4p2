@@ -1,0 +1,550 @@
+<html>
+<head>
+<title>user page</title>
+		<link rel="stylesheet" type="style/css" href="/profile.css" /> 
+		<script src="http://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="style/css" href="/navbar.css" /> 
+		<script src="../../cookie.js"></script>
+		<script src="../../MD5.js"></script>
+	<script>
+	$(document).ready(function(){
+
+	    var user_id = document.getElementById("recognition_tag").getAttribute("value");
+
+	    document.getElementById("user_id").innerHTML = String(user_id);
+		var edit_clicked = false;
+		var reset_clicked = false;
+
+		var edit = document.createElement("input");
+        edit.type = "submit";
+        edit.id = "edit";
+        edit.value = "edit";
+		document.getElementById("edit_button_area").appendChild(edit);
+
+		var reset_password = document.createElement("input");
+        reset_password.type = "submit";
+        reset_password.id = "reset_password";
+     	reset_password.value = "reset password?";
+		document.getElementById("change_area").appendChild(reset_password);	
+		var save = document.createElement("input");
+        save.type = "submit";
+        save.id = "save";
+        save.value = "save";
+	    var linebreak = document.createElement("br");
+	    var linebreak1 = document.createElement("br");
+	    var linebreak2 = document.createElement("br");
+	    var linebreak3 = document.createElement("br");
+	    var linebreak4 = document.createElement("br");
+	    var linebreak5 = document.createElement("br");
+
+
+        var reset_password_button = $("#reset_password");
+		reset_password_button.click(function(){
+			var login_user = checkCookie();
+			if (reset_clicked == false && login_user == user_id){
+				reset_clicked = true;
+				document.getElementById("topic_info").innerHTML = "";
+
+				if (edit_clicked == true){
+					edit_clicked = false;
+					var area = document.getElementById("topic_info");
+					var location = document.getElementById("edit_location_");
+					area.removeChild(location);
+					var occupation = document.getElementById("edit_occupation_");
+					area.removeChild(occupation);						
+					var hobby = document.getElementById("edit_hobby_");
+					area.removeChild(hobby);						
+					var signiture = document.getElementById("edit_signiture_");
+					area.removeChild(signiture);
+					var save = document.getElementById("save");
+					area.removeChild(save);			
+				}
+	    		var edit_old_password_ = document.createElement("input");
+                edit_old_password_.type = "text";
+                edit_old_password_.className = "inputs";
+                edit_old_password_.id = "edit_old_password_";
+                edit_old_password_.placeholder = 'input old password...';
+    			document.getElementById("topic_info").appendChild(edit_old_password_);
+
+	    		var edit_new_password_ = document.createElement("input");
+                edit_new_password_.type = "text";
+                edit_new_password_.className = "inputs";	             
+                edit_new_password_.id = "edit_new_password_";
+                edit_new_password_.placeholder = 'input new password...';
+
+				var reset_password_confirm = document.createElement("input");
+		        reset_password_confirm.type = "submit";
+		        reset_password_confirm.id = "reset_password_confirm";
+		     	reset_password_confirm.value = "reset confirm";
+		     			    			document.getElementById("topic_info").appendChild(edit_new_password_);
+
+				document.getElementById("topic_info").appendChild(reset_password_confirm);
+
+				var reset_confirm = $("#reset_password_confirm");
+				reset_confirm.click(function(){
+
+
+
+					var old_password = $('#edit_old_password_').val();
+					var new_password = $('#edit_new_password_').val();
+					old_password = MD5(old_password);
+					new_password = MD5(new_password);
+					$.post("/users/" + user_id + "/reset", {'old_password': old_password, 'new_password': new_password, 'author':checkCookie(),'session_id':checkCookieID()}, function(data,status){
+							if (data == 'success'){
+								alert('password reset successfully');
+							}
+							else{
+								alert('wrong password, reset again?');
+							}
+
+					});
+				
+				});
+			}
+
+		});
+
+        var edit_button = $("#edit");
+		edit_button.click(function(){
+			document.getElementById("topic_info").innerHTML = "";
+			var login_user = checkCookie();
+			if (edit_clicked == false && login_user == user_id){
+				// add save button
+				edit_clicked = true;
+
+				if (reset_clicked == true){
+					reset_clicked = false;
+					var area = document.getElementById("topic_info");
+					var old_password = document.getElementById("edit_old_password_");	
+					area.removeChild(old_password);
+					var new_password = document.getElementById("edit_new_password_");	
+					area.removeChild(new_password);					
+					var reset = document.getElementById("reset_password_confirm");	
+					area.removeChild(reset);				
+				}
+
+
+	    		
+	    		// add the input text
+	    		var edit_location_ = document.createElement("input");
+                edit_location_.type = "text";
+                edit_location_.id = "edit_location_";
+               	edit_location_.className = 'inputs';
+                edit_location_.placeholder = 'input new location...';
+    			document.getElementById("topic_info").appendChild(edit_location_);
+
+	    		var edit_occupation_ = document.createElement("input");
+                edit_occupation_.type = "text";
+               	edit_occupation_.className = 'inputs';
+                edit_occupation_.id = "edit_occupation_";
+                edit_occupation_.placeholder = 'input new occupation...';
+    			document.getElementById("topic_info").appendChild(edit_occupation_);
+
+	    		var edit_hobby_ = document.createElement("input");
+                edit_hobby_.type = "text";
+                edit_hobby_.id = "edit_hobby_";
+                edit_hobby_.className = 'inputs';
+                edit_hobby_.placeholder = 'input new hobby...';
+    			document.getElementById("topic_info").appendChild(edit_hobby_);
+
+	    		var edit_signiture_ = document.createElement("input");
+                edit_signiture_.type = "text";
+                edit_signiture_.id = "edit_signiture_";
+                edit_signiture_.className = 'inputs';
+                edit_signiture_.placeholder = 'input new signiture...';
+    			document.getElementById("topic_info").appendChild(edit_signiture_);
+    			document.getElementById("topic_info").appendChild(save);
+				
+				var save_button = $("#save");
+				save_button.click(function(){
+					alert("save");
+					var new_info = [];
+					if ($('#edit_location_').val()){
+						var location = $('#edit_location_').val();
+						new_info.push(location);
+						document.getElementById("location").innerHTML = location;
+
+					}
+					else{
+						new_info.push(document.getElementById("location").value);
+
+					}
+					if ($('#edit_occupation_').val()){
+						var occupation = $('#edit_occupation_').val();
+						new_info.push(occupation);
+						document.getElementById("occupation").innerHTML = occupation;
+
+					}
+					else{
+						new_info.push(document.getElementById("occupation").value);
+					}
+					if ($('#edit_hobby_').val()){
+						var hobby = $('#edit_hobby_').val();
+						new_info.push(hobby);
+						document.getElementById("hobby").innerHTML = hobby;
+					}
+					else{
+						new_info.push(document.getElementById("hobby").value);
+
+					}
+					if ($('#edit_signiture_').val()){
+						var signiture = $('#edit_signiture_').val();
+						new_info.push(signiture);
+						document.getElementById("signiture").innerHTML = signiture;
+					}
+					else{
+						new_info.push(document.getElementById("signiture").value);
+
+					}
+			
+
+			        $.post("/users/" + user_id + "/save", {'location': new_info[0], 'occupation': new_info[1], 'hobby': new_info[2], 'signature':new_info[3], 'author':checkCookie()}, function(data,status){});
+					
+		    	});		        
+			}
+    	});
+
+
+	    var questions = $("#questions");
+	    questions.click(function(){
+	    	var url = "/users/" + user_id + "/questions";
+
+
+			$.get(url,function(data,status){
+				alert(data);
+    			data = JSON.parse(data);
+    			data = data.posts;
+    			var output = ""; 
+    			for (var i=0;i<data.length;i++){
+    				output += 'Title: ' + data[i].title + '<br>Text: ' + data[i].text + '<hr>';
+    			}
+	      		document.getElementById("topic_info").innerHTML = output;
+	    	});
+	    });
+
+	    var topics = $("#topics");
+	    var topic_check = false;
+	    topics.click(function(){
+	    	// get the username
+
+	    	var url = "/users/" + user_id + "/topics";
+	    	alert(url);
+			$.get(url,function(data,status){
+				alert(data);
+   				data = JSON.parse(data);
+    			data = data.topics;
+    			var output = "Topics: "; 
+    			for (var i=0;i<data.length;i++){
+    				output += data[i] + '<br>';
+    			}
+	      		document.getElementById("topic_info").innerHTML = output;	    	
+	      	});	
+	    	   
+	    });
+		
+	
+
+	});
+	</script>
+
+
+
+</head>
+	
+
+<body>
+		<form id="pop-form">
+        <div id='pop-div' style="width: 800px;" class="pop-box">
+            <header>
+                <h3>Search...</h3>
+               </header>
+            <div class="pop-box-body">
+                <p>
+                   <h3 id="TopicTitle">Topic:</h3>
+                   <div><h3 id="QuestionTitle">Questions:</h3></div>
+                   <div><h3 id="ArticleTitle">Article:</h3></div>
+                </p>
+            </div>  
+        </div>
+    </form>
+
+	<canvas id="canvas"></canvas>
+	<script src="../../background.js"></script>
+	<ul id="nav">
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href="/"><font color="white">TechHub</font></a></li>
+      <li id="searchbar" class="navi" class="hidden">
+      <input id="bar" type="text" placeholder="Search for Topic, Question or Answer..."></input><button  href="login.html" id="sub_button" class="button" type="button">Search</button>
+      </li>
+        <li ><a href="/main.html"><font color="white">Feed</a></font></li>
+        <li  ><a href="/community.html"><font color="white">Community</a></font></li>
+        <li ><a href="/newpost.html"><font color="white">Post</a></font></li>
+        <li ><div id='sta'><a href="/login.html" ><font color="white">Login</font></a></div></li>
+        <li class="arrow"><a href="#nav2"><font color="white">&#10552</font></a></li>
+    </ul>
+
+	<script>
+		var max_width = window.innerWidth, max_hight = window.innerHeight, NumOfPoints = 25;//initial the max width, hight and num of points in main page
+		
+		var canvas = document.getElementById('canvas');//get the object
+		canvas.width = max_width,//set the max width
+		canvas.height = max_hight;//set the max hight
+		var context = canvas.getContext('2d');
+		context.strokeStyle = 'rgba(0,0,0,0.5)',//initial the stroke style
+		context.strokeWidth = 1,//set the stroke's width
+		context.fillStyle = 'rgba(0,0,0,0.2)';//fill the color into the point
+		var circleList = [];
+		function Line (x, y, _x, _y, o) {
+			this.origin_X = x,//initial x of the line
+			this.origin_Y = y,//initial y of the line
+			this.end_X = _x,//where x end of the line
+			this.end_Y = _y,//where y end of the line
+			this.o = o;//transparency of the line
+		}
+
+		function Circle(x, y, r, currX, currY){//initialize the origin of circle here
+			this.x = x,//initialize the x
+			this.y = y,//initialize the y
+			this.r = r,//initialize the radius
+			this.currX = currX,//new x where it moves to
+			this.currY = currY;//new y where it moves to
+		}
+
+		function random_Num(max, _min) {//generates a random number within the max and min
+			var min = arguments[1] || 0;
+			return Math.floor(Math.random()*(max-min+1)+min);
+		}
+
+		function drawCricle (cxt, x, y, r, currX, currY) {
+			var circle = new Circle(x, y, r, currX, currY)
+			cxt.beginPath()
+			cxt.arc(circle.x, circle.y, circle.r, 0, 2*Math.PI)
+			cxt.closePath()
+			cxt.fill();
+			return circle;
+		}
+
+		function drawLine (cxt, x, y, _x, _y, o) {//connect the two point 
+			var line = new Line(x, y, _x, _y, o)//create the new line here
+			cxt.beginPath()
+			cxt.strokeStyle = 'rgba(0,0,0,'+ o +')'//make the line to stroke
+			cxt.moveTo(line.origin_X, line.origin_Y)//the destination where the line moves to by x
+			cxt.lineTo(line.end_X, line.end_Y)//the desination where the line moves to by y
+			cxt.closePath()
+			cxt.stroke();
+
+		}
+		function resize(){
+			canvas.width = window.innerWidth,//set the max width
+			canvas.height = window.innerHeight;//set the max hight
+			context.fillStyle = 'rgba(0,0,0,0.2)';
+		}
+		function origin() {//creates origin for each new pinte in html, and limit the number of points that will be generated in html
+			circleList = [];
+			for (var i = 0; i < NumOfPoints; i++) {//counts down the number of the points that have been drawn
+				circleList.push(drawCricle(context, random_Num(max_width), random_Num(max_hight), random_Num(15, 2), random_Num(10, -10)/40, random_Num(10, -10)/40));
+			}
+			draw();
+			resize();
+		}
+
+
+		function draw() {//make each small part to move by updating the x and y
+			context.clearRect(0,0,canvas.width, canvas.height);//clean the old line here
+			for (var i = 0; i < NumOfPoints; i++) {//loop the circle in the circleList
+				drawCricle(context, circleList[i].x, circleList[i].y, circleList[i].r);
+			}
+			for (var i = 0; i < NumOfPoints; i++) {//loop the circle in the circleList
+				for (var j = 0; j < NumOfPoints; j++) {
+					if (i + j < NumOfPoints) {
+						var A = Math.abs(circleList[i+j].x - circleList[i].x),
+							B = Math.abs(circleList[i+j].y - circleList[i].y);
+						var lineLength = Math.sqrt(A*A + B*B);//get the area
+						var C = 1/lineLength*7-0.009;
+						var lineOpacity = C > 0.03 ? 0.03 : C;
+						if (lineOpacity > 0) {
+							drawLine(context, circleList[i].x, circleList[i].y, circleList[i+j].x, circleList[i+j].y, lineOpacity);
+						}
+					}
+				}
+			}
+		}
+
+
+		window.onload = function () {
+			origin();
+			setInterval(function () {//load the function to start drawing
+				for (var i = 0; i < NumOfPoints; i++) {
+					var cir = circleList[i];
+					cir.x += cir.currX;
+					cir.y += cir.currY;
+					if (cir.x > max_width) cir.x = 0;
+					else if (cir.x < 0) cir.x = max_width;
+					if (cir.y > max_hight) cir.y = 0;
+					else if (cir.y < 0) cir.y = max_hight;
+					
+				}
+				draw();
+			}, 16);
+
+/*
+      		var location = 'toronto';
+      		var occupation = 'student';
+      		var hobby = 'fight';
+      		var signiture = ' To be a one-punch-man!';
+      		document.getElementById("user_id").innerHTML = user_id;
+      		document.getElementById("location").innerHTML = location;
+      		document.getElementById("occupation").innerHTML = occupation;
+      		document.getElementById("hobby").innerHTML = hobby;
+      		document.getElementById("signiture").innerHTML = signiture;
+	
+*/
+	  		var user_id = document.getElementById("recognition_tag").getAttribute("value");
+
+
+			$.post("http://localhost:3000/users/"+user_id+"/show", function(data,status){
+				// 
+	      		var information = JSON.parse(data);
+	      		//mock
+	      		
+	      		var location = information.location;
+	     		var occupation = information.occupation;
+	     		var hobby = information.hobby;
+	     		var signiture = information.signature;
+	     		var src = "../../resource/icon1.png";
+	     		var profile = document.createElement("img");
+
+				profile.setAttribute('src', src);
+				profile.setAttribute('alt', "photo");
+				profile.setAttribute('height', "200");
+				profile.setAttribute('width', "200");
+
+	      		document.getElementById("location").innerHTML = location;
+	      		document.getElementById("location").value = location;
+	      		document.getElementById("occupation").innerHTML = occupation;
+	      		document.getElementById("occupation").value = occupation;
+
+	      		document.getElementById("hobby").innerHTML = hobby;
+	      		document.getElementById("hobby").value = hobby;
+
+	      		document.getElementById("signiture").innerHTML = signiture;
+	      		document.getElementById("signiture").value = signiture;
+
+	     		document.getElementById("src").innerHTML = src;
+	    		document.getElementById("profile").appendChild(profile);
+
+
+	    	});
+
+		}
+
+	</script>
+
+	<div class="main">
+	<br>
+	<h3>
+	<br>
+	<div class="container">
+	<div id="Saitama">
+		<br>
+		<text id='profile'>
+		</text>
+<<img id="src"> 
+
+		<br>
+	</div>    
+
+
+		<div id="header">
+		<table style="width:100%" >
+		  <tr>
+		    <td><span class="divcss5-F00">&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+		    <td><text id="user_id"></div></td>
+		  </tr>
+		  <tr>
+
+		    <td><span class="divcss5-F00">&nbsp;&nbsp;Location&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+		    <td><text id="location"></text></td>
+		  </tr>
+		  <tr>
+		    <td><span class="divcss5-F00">&nbsp;&nbsp;Occupation&nbsp;</span></td>
+		    <td><text id="occupation"></text></td>
+		  </tr>
+		  <tr>
+		    <td><span class="divcss5-F00">&nbsp;&nbsp;Hobby&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+		    <td><text id="hobby"></text></td>
+		  </tr>
+	
+
+		</table>
+		<br>
+   &nbsp;<span class="divcss5-F00">&nbsp;My signiture</span><br>
+    <text id="signiture">
+    </text>
+    <br>
+    <br><br>
+
+
+
+
+
+
+
+
+	</div>
+
+
+    <div id="content1">
+
+    </div>
+
+</div>
+
+
+
+
+	</div>
+
+		<input type="submit" id="questions" name="post_content" value="My questions">
+
+		<input type="submit" id="topics" name="post_content" value="Topics">
+<text id='edit_button_area'></text>&nbsp;<text id='save_area'></text>&nbsp;<text id='change_area'></text>&nbsp;<text id='confirm_area'></text>
+	<br>
+<text id="topic_info">
+
+
+</text>
+	<br>
+
+
+
+
+<div id="r">
+<div class="recent">
+<div id="recommanded">
+</div>
+
+
+
+</div>
+
+</div>
+<br>
+<br>
+<br>
+
+<script src="/navbar.js"></script>
+
+</body>
+
+
+
+</html>
+
+
+
+
+
+
+

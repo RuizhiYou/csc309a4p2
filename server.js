@@ -78,6 +78,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		//find all posts containing that topic in the topics array field
 
 		if (topic.indexOf(" ") > -1){
+			console.log("ABCD");
 			var matched_posts_array = postsCol.find({title: {$eq: topic}}).toArray();
 			matched_posts_array.then(function(matched_posts_array){
 				var i;
@@ -103,6 +104,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 			var matched_posts_array = postsCol.find({title: {$regex: ".*"+topic+".*"}}).toArray();
 			topic_matches_array.then(function(topic_matches_array){
 				if (topic_matches_array.length > 0){
+					console.log('1\n');
 					found = topic;
 				} 			
 			});
@@ -131,6 +133,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		var link = req.path.split('/')[3].trim();
 		var postsCol = db.collection('posts');
 		var usersCol = db.collection('users');
+		console.log(user_id);
 		if (link == 'show'){
 			var user = usersCol.find({'username': user_id}).toArray();
 			user.then(function(user){
@@ -141,11 +144,13 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 				var src = user[0].src;
 				
 				var data = JSON.stringify({"location": location, "occupation": occupation, "hobby": hobby, "signature": signature, 'src': src});
+				console.log(data);
 				res.end(data);
 			});
 		} else if (link == 'save'){
 			usersCol.update({'username': user_id}, {$set: {'occupation': req.body.occupation, 'location': req.body.location, 'hobby': req.body.hobby, 'signature': req.body.signature}});
 		} else if (link == 'reset'){
+			console.log("IN");
 			var user = usersCol.findOne({"username": user_id});
 			user.then(function(user){
 				if (user.password == req.body.old_password){
@@ -157,6 +162,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 					}
 					
 				} else {
+					console.log('ELSE');
 					res.end('failure');
 				}
 			});
@@ -195,6 +201,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 				for (k=0; k<posts.length; k++){
 					post = posts[k];
 					post_topics = post.topics;
+					console.log(k);
 					var i;
 					if (post_topics){
 						for (i=0; (i<post_topics.length && j<(10+parseInt(tens))); i++){
@@ -207,6 +214,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 						}
 					}
 					if (j >= (10+parseInt(tens))){
+						console.log('end');
 						break;
 					}
 				}
@@ -221,6 +229,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 					throw err;
 					return;
 				}
+				console.log("1234");
 				res.write(html);
 				res.end();
 			});
@@ -379,6 +388,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		db.createCollection('topicsCol', {strict:true}, function(err, collection){});
 		var topicsCol = db.collection('topicsCol');
 		// get the fields sent from client-side
+		console.log(req.body);
 		var post_type_array = JSON.parse(req.body.post_type);
 		var post_type = post_type_array[0];
 		var topics_array = JSON.parse(req.body.topics);
@@ -407,7 +417,8 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		}
 
 
-
+		console.log("Topics: ");
+		console.log(topics_array);
 		for (var i=0; i<topics_array.length; i++){
 			topicsCol.update({"topic_id": topics_array[i]}, {"topic_id": topics_array[i], "followed_by": [], "similarity": {}}, {upsert: true});
 		}
@@ -445,6 +456,8 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		// Try to find the tuple within the collection
 		var matches = usersCol.find({'username':username}).toArray();
 		matches.then(function(matches){
+			//console.log(matches);
+			//console.log(matches.length);
 
 			//if not found, write into the database
 			if (matches.length <= 0){
@@ -477,6 +490,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 				res.end("0"); //failed
 			} else {
 			// if the username exists, check password
+				console.log(matchesArray[0].username);
 				if (matchesArray[0].password == password){
 					var d = new Date();
     				var n = d.getTime();
@@ -498,6 +512,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 	// post is used for transfering data back to html
 	app.get('/topics*', function(req, res){
 		var topic = req.path.split('/')[2].trim();
+		console.log(topic);
 		res.write("<div id='recognition_tag' value='"+topic+"' ></div>");
 		fs.readFile('public/topic.html', function(err, html){
 			if (err) {
@@ -532,8 +547,10 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 	app.get('/posts/*/*', function(req, res){
 		var post_id = req.path.split('/')[2];
 		var action = req.path.split('/')[3];
-
+		console.log(post_id);
+		console.log(action);
 		if (action == 'show'){
+			console.log("IN");
 			res.write("<div id='recognition_tag' value='"+post_id+"' ></div>");
 			fs.readFile('public/question.html', function(err, html){
 				if (err) {
@@ -609,6 +626,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 
 
 		} else if (action == 'show'){
+			console.log("IN2");
 			var post = postsCol.findOne({_id: ObjectId(post_id)});
 			post.then(function(post){
 				res.end(JSON.stringify({'result': post}));
@@ -631,6 +649,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 		var usersCol = db.collection('users');
 		all_users = usersCol.find().toArray();
 		all_users.then(function(all_users){
+			console.log(all_users);
 			res.end(JSON.stringify({'users': all_users}));
 		});
 	});
@@ -657,6 +676,7 @@ MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
 	});
 	//    /admin/posts  -> change title/content
 	app.post('/admin/modifyposts', function(req, res){
+		console.log("modifypost");
 		var postsCol = db.collection('posts');
 		var id = req.body.id;
 		var title = req.body.title;

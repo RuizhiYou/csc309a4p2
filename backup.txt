@@ -1,0 +1,10 @@
+    #sidebar{
+	border-radius: 25px;
+	padding: 20px;
+
+	border: 2px solid #73AD21;
+
+
+    width: 300px;
+    height: 400px; 
+}

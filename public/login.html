@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<meta name="google-signin-scope" content="profile email">
+    	<meta name="google-signin-client_id" content="1093471702807-4nu71bvnoajgqevb721fhtecmkl8pmf0.apps.googleusercontent.com">
+    	<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<link rel="stylesheet" href="navbar.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script src="MD5.js"></script>
+		<link rel="stylesheet" href="style.css">
+	<style></style>
+	<script src="cookie.js"></script>
+	<script>
+
+		function login(){
+			var username = document.getElementById("inputUN").value;
+			var password = document.getElementById("inputPW").value;
+			password = MD5(password);
+			$.post("/login", {username: username, password: password}, function(data){
+	 			if (data != '0'){
+	 				setCookie("username",username, 2);
+	 				setCookie("session_id",data, 2);
+	 				window.location="main.html";
+	 			} else {
+	 				document.getElementById("error").innerHTML = "Login Failed. Please check your username or password";
+	 			}
+	 		});
+		}
+	</script>
+
+
+	</head>
+
+	<body>
+		<script src="facebook.js"></script>
+
+		<form id="pop-form">
+	        <div id='pop-div' style="width: 800px;" class="pop-box">
+	            <header>
+	                <h3>Search...</h3>
+	               </header>
+	            <div class="pop-box-body">
+	                <p>
+	                   <h3 id="TopicTitle">Topic:</h3>
+	                   <div><h3 id="QuestionTitle">Questions:</h3></div>
+	                   <div><h3 id="ArticleTitle">Article:</h3></div>
+	                </p>
+	            </div>  
+	        </div>
+	    </form>
+		<canvas id="canvas"></canvas>
+		<script src="background.js"></script>
+		<ul id="nav">
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href="/"><font color="white">TechHub</font></a></li>
+      <li id="searchbar" class="navi" class="hidden">
+        <input id="bar" type="text" placeholder="Search for Topic, Question or Answer..."></input><button  id="sub_button" href="login.html" class="button" type="button">Search</button>
+      </li>
+        <li ><a href="/main.html"><font color="white">Feed</a></font></li>
+        <li  ><a href="/community.html"><font color="white">Community</a></font></li>
+        <li ><a href="/newpost.html"><font color="white">Post</a></font></li>
+
+        <li class="arrow"><a href="#nav2"><font color="white">&#10552</font></a></li>
+    </ul>
+		<div class="main">
+			<div class="logo">Our Logo!</div>
+			<div id="error"></div>
+			<div id="login">
+
+					<div class="login">
+						<input class="inputs" type="text" id="inputUN" placeholder="Username"/>
+						<input class="inputs" type="password" id="inputPW" placeholder="Password"/>
+						<input type="submit" id="submit_button" onclick="login()" value="Log In"/>
+						</br>
+						<div type="submit" id="fb_login" class="g-signin2" data-onsuccess="onSignIn"></div>
+						<a href="">Forgot password?</a> 
+						</br>
+						<a href="register.html">First time visiting? Register here!</a>
+					</div>
+			</div>
+		</div>
+
+		<script>
+	      function onSignIn(googleUser) {
+	        var profile = googleUser.getBasicProfile();
+	        /*alert('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+	        alert('Name: ' + profile.getName());
+	        alert('Image URL: ' + profile.getImageUrl());
+	        alert('Email: ' + profile.getEmail());*/
+	        var name = profile.getName();
+	        while(name.includes(' ')){
+            	name = name.replace(' ','+');
+        	}
+	        setCookie("username",name,2);
+	        $.post("/register", {username: name, password: "123456", email: profile.getEmail()}, function(data){
+			});
+	        window.location="/main.html";
+	      };
+	    </script>
+		<script src="navbar.js"></script>
+
+</body>
+
+
+
+
+	</body>            
+</html>
