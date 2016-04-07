@@ -1,0 +1,127 @@
+<div id="recognition_tag" value="123"></div>
+<html>
+<head>
+	<link href="../../navbar.css" rel="stylesheet" />
+	<link href="../../topic.css"  rel="stylesheet" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="../../cookie.js"></script>
+	<meta name="google-signin-scope" content="profile email">
+	<meta name="google-signin-client_id" content="1093471702807-eqfo5mijcvdgac90o979f70aba4c9vj6.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+
+	<form id="pop-form">
+        <div id='pop-div' style="width: 800px;" class="pop-box">
+            <header>
+                <h3>Search...</h3>
+               </header>
+            <div class="pop-box-body">
+                <p>
+                   <h3 id="TopicTitle">Topic:</h3>
+                   <div><h3 id="QuestionTitle">Questions:</h3></div>
+                   <div><h3 id="ArticleTitle">Article:</h3></div>
+                </p>
+            </div>  
+        </div>
+    </form>
+
+	<canvas id="canvas"></canvas>
+	<script src="../../background.js"></script>
+	<ul id="nav">
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href="/"><font color="white">TechHub</font></a></li>
+      <li id="searchbar" class="navi" class="hidden">
+        <input id="bar" type="text" placeholder="Search for Topic, Question or Answer..."></input><button  href="login.html" id="sub_button" class="button" type="button">Search</button>
+      </li>
+        <li ><a href="/main.html"><font color="white">Feed</a></font></li>
+        <li  ><a href="/community.html"><font color="white">Community</a></font></li>
+        <li ><a href="/newpost.html"><font color="white">Post</a></font></li>
+        <li ><div id='sta'><a href="login.html" ><font color="white">Login</font></a></div></li>
+
+        <li class="arrow"><a href="#nav2"><font color="white">&#10552</font></a></li>
+    </ul>
+    
+  </bar>
+	</br></br>
+
+	<div class="head">
+	</br>
+	</br>
+	</id>
+	<div id="sidebar" >
+		<ul>
+			<li><a href="">What's Hot</a></li>
+			<li><a href="main.html">My Feed</a></li>
+			<li><a href="">My Collection</a></li>
+			<li><a href="">What's new</a></li>
+			<li><a href="">Setting</a></li>
+			<li id="space"></li>
+		</ul>
+	</div>
+
+	<div id="title">
+		<div>
+		<h1 id="topic">Topic: </h1>
+		<a href="javascript:followTopic();" id="follow" align="right">Follow</a></div>
+		<!-- Rating Topic function currently disabled.
+		<h2 id="rating" align="right">Rating:</a></div>
+		<form id="rating_button">
+			<input type="radio" id="1" value="male"> 1
+	  		<input type="radio" id="2" value="female"> 2
+	  		<input type="radio" id="3" value="female"> 3
+	  		<input type="radio" id="4" value="female"> 4
+	  		<input type="radio" id="5" value="other"> 5
+	  		<button  onclick="rate()">Rate</button>
+  		</form>
+  		-->
+		<text id="description"></text>
+	</br></br>
+	</div>
+	<div id="content">
+		
+		
+<!--
+		<div class="post">
+			<div class="metadata">
+				<img align="right" class="ava" src="resource/icon1.png" alt="Mountain View" style="width:40px;height:40px;"></img>
+			</div>
+		<text class="cont">How is Surfacebook?</br></br></br></text>
+		<div class="botbar"><text ><button class="vote">Upvote</button>(108), <a href="">Downvote</a>(20), <a href="">Created at 2013-1-1</a></text></div>
+		</div>
+		</br>
+
+
+		<div class="post">
+			<div class="metadata">
+				<img align="right" class="ava" src="resource/icon1.png" alt="Mountain View" style="width:40px;height:40px;"></img>
+			</div>
+		<text class="cont">How is Surfacebook?</br></br></br></text>
+		<div class="botbar"><text ><button class="vote">Upvote</button>(108), <a href="">Downvote</a>(20), <a href="">Created at 2013-1-1</a></text></div>
+		</div>
+		</br>
+
+
+		<div class="post">
+			<div class="metadata">
+				<img align="right" class="ava" src="resource/icon1.png" alt="Mountain View" style="width:40px;height:40px;"></img>
+			</div>
+		<text class="cont">How is Surfacebook?</br></br></br></text>
+		<div class="botbar"><text ><button class="vote">Upvote</button>(108), <a href="">Downvote</a>(20), <a href="">Created at 2013-1-1</a></text></div>
+		</div>
+		</br>
+
+
+
+		
+		<div class="post">
+		<text class="title">Load More...</text></br>
+		</div>
+-->
+		</div>
+		<div class="g-signin2" style="display: none"data-onsuccess="onSignIn"></div>
+		<script src="../../navbar.js"></script>
+
+		<script src="../../topic.js"></script>
+</body>
+</html>
