@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="navbar.css"></link>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<script src="cookie.js"></script>
+		<script src="MD5.js"></script>
+		<link rel="stylesheet" href="style.css"></link>
+		<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+
+	</head>
+
+	<body>
+		<form id="pop-form">
+	        <div id='pop-div' style="width: 800px;" class="pop-box">
+	            <header>
+	                <h3>Search...</h3>
+	               </header>
+	            <div class="pop-box-body">
+	                <p>
+	                   <h3 id="TopicTitle">Topic:</h3>
+	                   <div><h3 id="QuestionTitle">Questions:</h3></div>
+	                   <div><h3 id="ArticleTitle">Article:</h3></div>
+	                </p>
+	            </div>  
+	        </div>
+	    </form>
+		<ul id="nav">
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href="home.html"><font color="white">TechHub</font></a></li>
+      <li id="searchbar" class="navi" class="hidden">
+        <input id="bar" type="text" placeholder="Search for Topic, Question or Answer..."></input><button  href="login.html" class="button" type="button">Search</button>
+      </li>
+        <li ><a href="/main.html"><font color="white">Feed</a></font></li>
+        <li  ><a href="/community.html"><font color="white">Community</a></font></li>
+        <li ><a href="/newpost.html"><font color="white">Post</a></font></li>
+        <li ><a href="/login.html"><font color="white">Login</font></a></li>
+
+        <li class="arrow"><a href="#nav2"><font color="white">&#10552</font></a></li>
+    </ul>
+		<canvas id="canvas"></canvas>
+		<script src="background.js"></script>
+		<div class="main">
+			<div class="logo2">Our Logo!</div>
+
+			<div id="login">
+
+					<div class="login">
+						<div class='validation' id="username"></div><div></div>
+						<input class ='inputs' type="text" id="inputUN" onblur="usernameVal()" placeholder="Enter your username"/>
+						
+						<div class='validation' id="password"></div><div></div>
+						<input class ='inputs' type="password" id="inputPW" onblur="passwordVal()" placeholder="Enter your password"/>
+						
+						<div class='validation' id="password2"></div><div></div>
+						<input class ='inputs' type="password" id="inputPW2" onblur="password2Val()" placeholder="Confirm your password"/>
+						
+						<div class='validation' id="email"></div><div></div>
+						<input class ='inputs' type="email" id="inputE" onblur="emailVal()" placeholder="Enter your email"/>
+						
+						<div class='validation' id="email2"></div><div></div>
+						<input class ='inputs' type="email" id="inputE2" onblur="email2Val()" placeholder="Confirm your email"/>
+						
+						<input class ='inputs' type="submit" id="submit_button" value="Register" onclick="reg()"/>
+			
+						</br>
+						<a href="login.html">Already Registered? Click here to login!</a>
+					</div>
+			</div>
+		</div>
+
+		<script>
+		var invals = 5;
+		function usernameVal(){
+			var result = /^[a-zA-Z0-9.\-_@]+$/.test(document.getElementById("inputUN").value);
+			if (!result){
+				document.getElementById("username").innerHTML = "Please enter a valid username: a-Z0-9_-@ Only!";
+			}
+			else{
+				document.getElementById("username").innerHTML = "";
+				invals--;
+			}
+		}
+		function passwordVal(){
+			var result = /^[a-zA-Z0-9.\-_@]+$/.test(document.getElementById("inputPW").value);
+			if (!result){
+				document.getElementById("password").innerHTML = "Please enter a valid password: a-Z0-9_-@ Only!";
+			}
+			else{
+				invals--;
+				document.getElementById("password").innerHTML = "";
+			}
+		}
+		function password2Val(){
+			var result = (document.getElementById("inputPW").value == document.getElementById("inputPW2").value);
+			if (!result){
+				document.getElementById("password2").innerHTML = "Please enter the same password";
+			}
+			else{
+				invals--;
+				document.getElementById("password2").innerHTML = "";
+			}
+		}
+		function emailVal(){
+			var result = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(document.getElementById("inputE").value);
+			if (!result){
+				document.getElementById("email").innerHTML = "Please enter a valid email address";
+			}
+			else{
+				invals--;
+				document.getElementById("email").innerHTML = "";
+			}
+		}
+		function email2Val(){
+			var result = (document.getElementById("inputE").value == document.getElementById("inputE2").value);
+			if (!result){
+				document.getElementById("email2").innerHTML = "Please enter the same email address";
+			}
+			else{
+				invals--;
+				document.getElementById("email2").innerHTML = "";
+			}
+		}
+		function reg(){
+
+			if (invals > 0){
+				alert("Please complete the form correctly");
+				return;
+			}
+
+			var username = document.getElementById("inputUN").value;
+			var password = document.getElementById("inputPW").value;
+			password = MD5(password);
+			var email = document.getElementById("inputE").value;
+			var email2 = document.getElementById("inputE2").value;
+			var password2 = document.getElementById("inputPW2").value;
+			if (username =="" || password=="" || email == "" || password2=="" || email2==""){
+				alert("Please complete the form");
+				return;
+			}
+			//var data = {username, password, email];
+	 		$.post("/register", {username: username, password: password, email: email}, function(data){
+	 			if (data == '0'){
+	 				//do something
+	 				document.getElementById('username').innerHTML = "USERNAME EXISTS!!!!!!!!";
+	 			} else {
+	 				setCookie("username",username, 2);
+	 				window.location = "/main.html";
+	 			}
+	 		});
+		}
+	</script>
+</body>
+</html>
